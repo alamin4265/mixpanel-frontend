@@ -1,0 +1,33 @@
+<div class="product-list">
+  <h1>Cart Items</h1>
+  <div class="product-item" *ngFor="let item of cartItems">
+    <img [src]="item.images?.[0]" alt="Product Image" class="product-image">
+    <div class="product-details">
+      <h3>{{item.title}}</h3>
+      <p>Category: {{item.category}}</p>
+      <p>Price: ${{item.price}}</p>
+      <p>Quantity: {{item.count}}</p>
+      <div style="display: flex; gap: 10px">
+        <button (click)="removeItem(item)" class="btn-remove">Remove</button>
+        <!-- <button (click)="increment(item.id)" class="btn-remove">+</button>
+        <button (click)="decrement(item.id)" class="btn-remove">-</button> -->
+      </div>
+      
+    </div>
+  </div>
+
+</div>
+<div class="total-price">
+  <div class="product-item">
+    <div class="product-details">
+      <h3>Total Price:</h3>
+      <p>${{totalPrice}}</p>
+    </div>
+    <button (click)="goToCheckout()" class="btn-checkout">Checkout</button>
+    <button class="btn btn-primary" (click)="goBack()">Back to List</button>
+  </div>
+</div>
+
+<ng-template #emptyCart>
+  <p class="empty-message">Your cart is empty.</p>
+</ng-template>

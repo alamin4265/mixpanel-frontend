@@ -1,0 +1,20 @@
+
+   <div class="container">
+    <div class="card product-card">
+      <img src="{{ prod.thumbnail }}" class="card-img-top product-image" alt="{{ prod.title }}">
+      <div class="card-body">
+        <h5 class="card-title">{{ prod.title }}</h5>
+        <p class="card-text"><strong>Category:</strong> {{ prod.category }}</p>
+        <p class="card-text"><strong>Description:</strong> {{ prod.description }}</p>
+        <p class="card-text"><strong>Price:</strong> ${{ prod.price }}</p>
+        <p class="card-text"><strong>Weight:</strong> {{ prod.weight }}kg</p>
+        <div style="align-items: center; display: flex; gap: 10px;">
+          <button class="btn btn-primary" (click)="goBack()">Back to List</button>
+          <button class="btn btn-primary" (click)="addToCart(prod)">Add to Cart</button>
+        </div>
+        
+      </div>
+     
+    </div>
+  </div>
+  

@@ -1,0 +1,9 @@
+<div class="product-card" (click)="onCardClick()">
+    <img [src]="product.images[0]" alt="Product Image" class="product-image">
+    <div class="product-info">
+      <h3 class="product-title">{{ product.title }}</h3>
+      <span class="product-price">{{ product.price}}</span>
+      <button class="btn btn-primary" (click)="addToCart($event)">Add to Cart</button>
+    </div>
+</div>
+  

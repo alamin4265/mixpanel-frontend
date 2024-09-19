@@ -1,0 +1,28 @@
+<div class="checkout-container">
+
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      <div >
+        <ul>
+          <li *ngFor="let item of cartItems">
+             <div class="product-details">
+              <h3>Title:{{ item.title }}</h3>
+              <p>Category: ${{ item.category }}</p>
+            </div> 
+          </li>
+        </ul>
+        <div class="total-price">
+          <span class="total-price-label">Total Cont:</span>
+          <span class="total-price-value">{{ count }}</span>
+          <br>
+          <span class="total-price-label">Total Price:</span>
+          <span class="total-price-value">${{ totalPrice }}</span>
+        </div>
+        <button (click)="checkout()" class="btn-checkout">Complete Purchase</button>
+      </div>
+      <ng-template #noItems>
+        <p>Your cart is empty.</p>
+      </ng-template>
+    </div>
+</div>
+  

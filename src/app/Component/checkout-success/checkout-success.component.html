@@ -1,0 +1,30 @@
+<div class="checkout-container">
+    <h1>Checkout</h1>
+    
+    <form (ngSubmit)="processPayment(paymentForm)" #paymentForm="ngForm">
+      <div class="form-group">
+        <label for="cardNumber">Card Number:</label>
+        <input type="text" id="cardNumber" name="cardNumber" ngModel required minlength="13" maxlength="19" placeholder="1234 5678 9123 4567" />
+      </div>
+  
+      <div class="form-group">
+        <label for="expiryDate">Expiry Date:</label>
+        <input type="text" id="expiryDate" name="expiryDate" ngModel required placeholder="MM/YY" />
+      </div>
+  
+      <div class="form-group">
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" ngModel required minlength="3" maxlength="4" placeholder="123" />
+      </div>
+  
+      <div class="form-group">
+        <button type="submit" class="btn-pay" (click)="Purchase()">Complete Purchase</button>
+      </div>
+    </form>
+    
+    
+    <ng-template #noItems>
+      <p>Your cart is empty.</p>
+    </ng-template>
+  </div>
+  

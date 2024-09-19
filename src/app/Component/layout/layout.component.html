@@ -1,0 +1,31 @@
+
+<nav class="custom-navbar">
+    <div class="navbar-container">
+      <ul class="navbar-menu">
+       
+        <li class="navbar-item ">
+            <a class="navbar-link active" routerLink="/products" (click)="viewProduct()">Product</a>
+        </li>
+        <!-- <li class="navbar-item ">
+          <a class="navbar-link active" routerLink="/products/add" (click)="addProduct()">Add Product</a>
+      </li> -->
+        <li class="navbar-item ">
+          <a class="navbar-link active" routerLink="/products" (click)="viewCart()">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>{{cartItemCount}}</span>
+          </a>
+      </li>
+     
+      </ul>
+      <div class="navbar-actions">
+        <span class="username">{{loggedUser?.name}}</span>
+        <button class="logout-btn" (click)="onLogOut()">LogOut</button>
+      </div>
+    </div>
+</nav>
+
+<div class="content">
+    <router-outlet></router-outlet> 
+</div>
+
+  

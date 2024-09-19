@@ -1,0 +1,91 @@
+/* Modern Navbar Styles */
+
+/* General Navbar Styles */
+.content {
+    padding-top: 100px; /* Adjust this value based on the navbar height */
+}
+
+.custom-navbar {
+    background-color: #f3e5f5;
+    border-radius: 0; /* Remove border radius */
+    margin: 0; /* Remove margin */
+    width: 100%; /* Full width */
+    padding: 10px 20px;
+    position: fixed; 
+    top: 0; /* Align at the top */
+    left: 0; 
+    right: 0; 
+    z-index: 1000; 
+}
+
+/* Container within Navbar */
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Navbar Menu Styles */
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-item {
+    margin-right: 20px; /* Spacing between items */
+}
+
+.navbar-link {
+    text-decoration: none;
+    color: #333; /* Dark color for text */
+    font-size: 16px;
+    padding: 10px 15px; /* Padding around links */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.navbar-link.active {
+    font-weight: bold;
+    color: #512da8; /* Color for active link */
+}
+
+/* Hover Effect */
+.navbar-link:hover {
+    color: #512da8; /* Color on hover */
+    background-color: #f4f4f4; /* Light grey background on hover */
+    border-radius: 4px; /* Rounded corners on hover */
+}
+
+/* Disabled Link Styles */
+.navbar-link.disabled {
+    color: #ccc; /* Light grey color for disabled links */
+    cursor: not-allowed; /* Change cursor to indicate disabled state */
+}
+
+/* Navbar Actions */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    margin-right: 20px; /* Increased spacing between username and button */
+    font-size: 16px;
+}
+
+.logout-btn {
+    background-color: #512da8; /* Button color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px; /* Padding inside the button */
+    margin-left: 20px; /* Increased space on the left of the button */
+    margin-right: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for button color */
+}
+
+.logout-btn:hover {
+    background-color: #3f2a6f; /* Darker shade on hover */
+}
