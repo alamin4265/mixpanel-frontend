@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MixpanelService } from '../../../Shared/Services/mixpanel.service';
 import { CartService } from '../../../Services/cart.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-details',
@@ -20,7 +21,8 @@ export class ProductDetailsComponent {
     private http: HttpClient,
     private router: Router,
     private mixpanelService: MixpanelService,
-    private cartService: CartService
+    private cartService: CartService,
+    private toastr: ToastrService
   ) {}
     
     ngOnInit(): void {
@@ -35,6 +37,7 @@ export class ProductDetailsComponent {
 
     addToCart(product: any){    
       this.cartService.addToCart(product, 1);
+      this.toastr.success('Addtocart Success');
     }
 
     goBack() {

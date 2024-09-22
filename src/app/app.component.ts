@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { LayoutComponent } from './Component/layout/layout.component';
 import { SignupLoginComponent } from './Component/signup-login/signup-login.component';

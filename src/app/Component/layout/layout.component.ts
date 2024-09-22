@@ -7,6 +7,7 @@ import { CartService } from '../../Services/cart.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MixpanelService } from '../../Shared/Services/mixpanel.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-layout',
@@ -18,9 +19,11 @@ import { MixpanelService } from '../../Shared/Services/mixpanel.service';
 export class LayoutComponent implements OnInit{
  loggedUser: any;
  cartItemCount: number = 0;
+
  constructor(private router: Router,
   private cartService: CartService,
-  private mixpanelService: MixpanelService
+  private mixpanelService: MixpanelService,
+  private toastr: ToastrService
   ){
     const loacalUser = localStorage.getItem('loggedUser');
     if(loacalUser != null){

@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Router} from '@angular/router';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ProductCardComponent } from './product-card/product-card.component';
+import { environment } from '../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product',
@@ -20,7 +22,9 @@ export class ProductComponent implements OnInit{
   productList: any [] =[];
   loading:boolean = true;    
   searchQuery: string = ''; 
-  constructor(private http : HttpClient, private router: Router) { }
+  apiUrl = environment.baseAPI;
+  backProd: any [] =[];
+  constructor(private http : HttpClient, private router: Router, private toastr: ToastrService) { }
   productOBJ: any ={
     "id":0,
     "brand":"",
@@ -31,14 +35,20 @@ export class ProductComponent implements OnInit{
     "images": "",
     "stock": "",
   }
-  ngOnInit(): void{
-   
+  ngOnInit(): void{ 
     this.fetchProducts(this.pageIndex, this.pageSize);
   }
   fetchProducts(pageIndex: number, pageSize: number): void {
     this.loading = true;
     const skip = pageIndex * pageSize;
     const apiUrl = `https://dummyjson.com/products?limit=${pageSize}&skip=${skip}&select=brand,title,category,description,price,images,stock`;
+    // const api = this.apiUrl+`Product/pagination?limit=${pageSize}&skip=${skip}`;
+    // this.http.get(api).subscribe((response: any) => {
+    //   debugger;
+    //   this.productList = response.products;
+    //   this.totalProducts = response.total; 
+    //   this.loading = false;
+    // });
     this.http.get(apiUrl).subscribe((response: any) => {
       this.productList = response.products;
       this.totalProducts = response.total; 
