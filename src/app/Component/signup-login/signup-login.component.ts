@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-signup-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, JsonPipe],
+  imports: [CommonModule, FormsModule, JsonPipe,ProductComponent],
   // encapsulation: ViewEncapsulation.None,
   templateUrl: './signup-login.component.html',
   styleUrl: './signup-login.component.css'

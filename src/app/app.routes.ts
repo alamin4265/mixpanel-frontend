@@ -9,7 +9,8 @@ import { CheckoutComponent } from './Component/checkout/checkout.component';
 import { CheckoutSuccessComponent } from './Component/checkout-success/checkout-success.component';
 import { authGuard } from './Services/auth.guard';
 import { loginGuard } from './Services/login.guard';
-import { AddProductComponent } from './Component/product/add-product/add-product.component';
+import AddProductComponent from './Component/admin/add-product/add-product.component';
+// import { AddProductComponent } from './Component/product/add-product/add-product.component';
 
 export const routes: Routes = [
     {
@@ -38,11 +39,11 @@ export const routes: Routes = [
                 // pathMatch: 'full',
                 canActivate: [authGuard],
             },
-            {
-                path:'products/add',
-                component:AddProductComponent,
-                canActivate: [authGuard],
-            },
+            // {
+            //     path:'products/add',
+            //     component:AddProductComponent,
+            //     canActivate: [authGuard],
+            // },
             {
                 path:'addtocart',
                 component:AddToCartComponent,
@@ -59,6 +60,12 @@ export const routes: Routes = [
                 canActivate: [authGuard],
             }
         ]
+    },
+    {
+        path:'admin/add',
+        // component:AddProductComponent,
+        loadComponent:()=>import('./Component/admin/add-product/add-product.component'),
+        canActivate: [authGuard],
     },
    
     // {

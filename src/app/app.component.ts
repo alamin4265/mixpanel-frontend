@@ -9,7 +9,7 @@ import { SignupLoginComponent } from './Component/signup-login/signup-login.comp
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,CommonModule,SignupLoginComponent,LayoutComponent],
+  imports: [RouterOutlet,CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

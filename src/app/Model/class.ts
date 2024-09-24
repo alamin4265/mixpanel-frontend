@@ -29,23 +29,17 @@ export class SignUpModel {
 
   export class Product {
     id: number;
-    brand: string;
-    title:string;
-    category: string;
+    name: number;
     description:string;
-    price: string;
-    images: string;
-    stock: string;
+    price: number;
+    stock: number;
 
     constructor(){
      this.id=0;
-     this.brand="";
-     this.title="";
-     this.category="";
+     this.name=0;
      this.description="";
-     this.price="";
-     this.images="";
-     this.stock="";
+     this.price=0;
+     this.stock=0;
     }
   }
   

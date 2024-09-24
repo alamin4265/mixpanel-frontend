@@ -53,7 +53,7 @@ export class LayoutComponent implements OnInit{
   this.router.navigate(['/products']);
  }
  addProduct(){
-  this.router.navigate(['/products/add']);
+  this.router.navigate(['/admin/add']);
  }
  private updateCartItemCount() {
   this.cartItemCount = this.cartService.getTotalCount();
