@@ -9,7 +9,7 @@
     </div>
 
     <div *ngIf="!loading" class="product-card-container">
-      <app-product-card *ngFor="let item of productList" [product]="item" (cardClick)="viewProductDetails($event)"></app-product-card>
+      <app-product-card #productcard *ngFor="let item of productList" [product]="item" (cardClick)="viewProductDetails($event)"></app-product-card>
     </div>
 
     <mat-paginator *ngIf="!loading" [length]="totalProducts"

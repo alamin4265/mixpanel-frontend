@@ -15,7 +15,11 @@
             <span>{{cartItemCount}}</span>
           </a>
       </li>
-     
+      <!-- lifecycle -->
+      <li class="navbar-item ">
+        <a class="navbar-link active" routerLink="/lifecycle" (click)="viewLifeCycle()">LifeCycle</a>
+    </li>
+
       </ul>
       <div class="navbar-actions">
         <span class="username">{{loggedUser?.name}}</span>

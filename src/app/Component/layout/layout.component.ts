@@ -58,4 +58,7 @@ export class LayoutComponent implements OnInit{
  private updateCartItemCount() {
   this.cartItemCount = this.cartService.getTotalCount();
 }
+viewLifeCycle(){
+  this.router.navigate(['/lifecycle']);
+}
 }

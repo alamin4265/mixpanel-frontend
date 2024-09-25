@@ -1,6 +1,6 @@
 import { CommonModule, JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { AfterContentChecked, AfterContentInit, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MixpanelService } from '../../../Shared/Services/mixpanel.service';
@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
-export class ProductDetailsComponent {
+export class ProductDetailsComponent implements OnInit, AfterContentInit,AfterContentChecked{
   prod: any;
   constructor(
     private route: ActivatedRoute,
@@ -25,7 +25,7 @@ export class ProductDetailsComponent {
     private toastr: ToastrService
   ) {}
     
-    ngOnInit(): void {
+  ngOnInit(): void {
       const id = this.route.snapshot.paramMap.get('id');
       if (id) {
         this.http.get(`https://dummyjson.com/products/${id}`).subscribe((result: any) => {
@@ -33,15 +33,23 @@ export class ProductDetailsComponent {
           this.mixpanelService.trackEvent('ProductDetail', { Category: this.prod.category });
         });
       }
-    }
+  }
+  //initialize
+  ngAfterContentInit(): void {
+    console.log("ngAfterContentInit on product-details");
+  }
+  //checked or changed
+  ngAfterContentChecked(): void {
+    console.log("ngAfterContentChecked on product-details");
+  }
 
-    addToCart(product: any){    
-      this.cartService.addToCart(product, 1);
-      this.toastr.success('Addtocart Success');
-    }
+  addToCart(product: any){    
+    this.cartService.addToCart(product, 1);
+    this.toastr.success('Addtocart Success');
+  }
 
-    goBack() {
-      this.router.navigate(['/products']);
-    }
+  goBack() {
+    this.router.navigate(['/products']);
+  }
    
 }

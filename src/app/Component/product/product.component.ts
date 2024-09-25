@@ -1,12 +1,13 @@
 import { CommonModule, JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { afterNextRender, afterRender, AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, viewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router} from '@angular/router';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { environment } from '../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product',
@@ -15,7 +16,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
-export class ProductComponent implements OnInit{
+export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked, OnDestroy{
   totalProducts: number = 0; 
   pageSize: number = 10;
   pageIndex: number = 0;
@@ -24,7 +25,12 @@ export class ProductComponent implements OnInit{
   searchQuery: string = ''; 
   apiUrl = environment.baseAPI;
   backProd: any [] =[];
-  constructor(private http : HttpClient, private router: Router, private toastr: ToastrService) { }
+  productSubscription:  Subscription | undefined; 
+  @ViewChildren(ProductCardComponent) productCards!: QueryList<ProductCardComponent>;
+  @ViewChild('productcard') child!: ProductCardComponent;
+  
+  constructor(private http : HttpClient, private router: Router, private toastr: ToastrService) {
+   }
   productOBJ: any ={
     "id":0,
     "brand":"",
@@ -49,7 +55,7 @@ export class ProductComponent implements OnInit{
     //   this.totalProducts = response.total; 
     //   this.loading = false;
     // });
-    this.http.get(apiUrl).subscribe((response: any) => {
+   this.productSubscription = this.http.get(apiUrl).subscribe((response: any) => {
       this.productList = response.products;
       this.totalProducts = response.total; 
       this.loading = false;
@@ -119,4 +125,25 @@ export class ProductComponent implements OnInit{
         });
     }
   }
+  ngAfterViewInit(): void {
+    console.log('ngAfterViewInit: View has been initialized'); 
+    console.log(this.child);
+  }
+
+  ngAfterViewChecked(): void {
+    console.log('Checked for view changes');
+    console.log(this.child);
+    this.child.logProductDetails();
+    this.productCards.forEach(productCard => {
+      //productCard.logProductDetails(); // Call method from child component
+    });
+  }
+
+  ngOnDestroy(): void {
+    console.log('ProductComponent is being destroyed');
+    if (this.productSubscription) {
+      this.productSubscription.unsubscribe();
+    }
+  }
+ 
 }

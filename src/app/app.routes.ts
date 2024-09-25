@@ -67,10 +67,10 @@ export const routes: Routes = [
         loadComponent:()=>import('./Component/admin/add-product/add-product.component'),
         canActivate: [authGuard],
     },
-   
-    // {
-    //     path: '**',
-    //     redirectTo: 'signup-login'
-    // },
+    {
+        path:'lifecycle',
+        // component:AddProductComponent,
+        loadComponent:()=>import('./life-cycle/life-cycle.component'),
+    },
     
 ];
