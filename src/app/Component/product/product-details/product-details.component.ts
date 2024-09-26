@@ -46,7 +46,7 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, AfterCont
     alert("ngAfterViewInit"); 
     console.log('ngAfterViewInit: View has been initialized'); 
     // this.prod.category="Watch"
-    this.updateCategory('Watch');
+    // this.updateCategory('Watch');
     
   }
   

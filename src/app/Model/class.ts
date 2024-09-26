@@ -27,16 +27,25 @@ export class SignUpModel {
     images?: string[]; 
   }
 
+  export interface CartProduct{
+    id: number;
+    brand: string;
+    title: string;
+    category: string;
+    price: number;
+    stock: number;
+    count: number;
+  }
   export class Product {
     id: number;
-    name: number;
+    name: string;
     description:string;
     price: number;
     stock: number;
 
     constructor(){
      this.id=0;
-     this.name=0;
+     this.name="";
      this.description="";
      this.price=0;
      this.stock=0;
