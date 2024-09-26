@@ -31,9 +31,7 @@ export class CheckoutComponent implements OnInit {
 
   checkout() { 
     if (this.cartItems.length > 0) {
-      // this.cartService.clearCart();
       this.mixpanelService.trackEvent('Checkout', { eventType: 'checkout'});
-      // alert("checkout-success");
       this.router.navigate(['/checkout-success']);
     } else {
       console.error('No items in the cart for checkout.');

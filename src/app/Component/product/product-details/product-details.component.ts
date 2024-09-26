@@ -6,6 +6,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MixpanelService } from '../../../Shared/Services/mixpanel.service';
 import { CartService } from '../../../Services/cart.service';
 import { ToastrService } from 'ngx-toastr';
+import { Store } from '@ngrx/store';
+import { CartState } from '../../../states/cart/cart.state';
+import { take } from 'rxjs';
+import { add, updateProductCount } from '../../../states/cart/action/cart.action';
+import { CartProduct } from '../../../Model/class';
 
 @Component({
   selector: 'app-product-details',
@@ -17,14 +22,16 @@ import { ToastrService } from 'ngx-toastr';
 export class ProductDetailsComponent implements OnInit, AfterViewInit, AfterContentInit{
   prod: any;
   @ViewChild('categoryElement') categoryElement!: ElementRef;
-
+  count: number = 1;
+  
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router,
     private mixpanelService: MixpanelService,
     private cartService: CartService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private store: Store<{ cart: CartState }>
   ) {}
     
   ngOnInit(): void {
@@ -36,15 +43,14 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, AfterCont
         });
       }
   }
-  //initialize
+
   ngAfterContentInit(): void {
     // alert("ngAfterContentInit"); 
-    // console.log("ngAfterContentInit on product-details");
+
   }
 
   ngAfterViewInit(): void { 
     alert("ngAfterViewInit"); 
-    console.log('ngAfterViewInit: View has been initialized'); 
     // this.prod.category="Watch"
     // this.updateCategory('Watch');
     
@@ -52,7 +58,6 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, AfterCont
   
   ngAfterViewChecked(): void {
     // alert("ngAfterViewChecked");
-    console.log('Checked for view changes')  
   }
   
   updateCategory(newCategory: string): void {
@@ -61,8 +66,30 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, AfterCont
   }
 
   addToCart(product: any){    
-    this.cartService.addToCart(product, 1);
-    this.toastr.success('Addtocart Success');
+    let existingProduct  ;
+   
+    this.store.select('cart').pipe(take(1)).subscribe(cartState => {
+      existingProduct = cartState.cartProducts.find(p => p.id === product.id);
+      if(existingProduct)this.count = existingProduct?.count +1;
+    });
+
+    if (existingProduct) {
+      this.store.dispatch(updateProductCount({ productId: product.id, count: this.count}));
+    } else {
+      const cartProduct: CartProduct = {
+        id: product.id,
+        brand: product.brand,
+        title: product.title,
+        category: product.category,
+        stock: product.stock,
+        count:this.count,
+        price: product.price,
+        images: product.images
+      };
+
+      this.store.dispatch(add({ product: cartProduct }));
+    }
+    this.count = 1; 
   }
 
   goBack() {

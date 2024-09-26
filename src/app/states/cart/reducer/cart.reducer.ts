@@ -11,41 +11,47 @@ export const cartReducer  = createReducer(
 
     initialState,
     on(add, (state, {product}) =>
-    ({
+    ({ 
         ...state,
         cartProducts: [...state.cartProducts, product],
         totalCount: state.totalCount + product.count,
         totalPrice: state.totalPrice + product.price * product.count
+        
     })
     ),
-    on(remove, (state, {productId}) =>(
-        {
-
-            ...state,
-            cartProducts: state.cartProducts.filter(p =>  p.id != productId),
-            totalCount: state.cartProducts.reduce((count, p) => count+p.count, 0),
-            totalPrice: state.cartProducts.reduce((total, p) => total + p.price* p.count , 0)
-        }
-    )),
+    on(remove, (state, { productId }) => {
+        const removedProduct = state.cartProducts.find(p => p.id === productId);
+        if (!removedProduct) return state;
+      debugger;
+        const updatedProducts = state.cartProducts.filter(p => p.id !== productId);
+        return {
+          ...state,
+          cartProducts: updatedProducts,
+          totalCount: state.totalCount - removedProduct.count,
+          totalPrice: state.totalPrice - (removedProduct.price * removedProduct.count)
+        };
+      }),
     on(updateProductCount, (state, { productId, count }) => {
+        debugger;
         const updatedProducts = state.cartProducts.map(p => 
           p.id === productId ? { ...p, count: count } : p
         );
+        debugger;
         const updatedTotalPrice = updatedProducts.reduce((total, p) => total + p.price * p.count, 0);
         const updatedTotalCount = updatedProducts.reduce((count, p) => count + p.count, 0);
         
         return { 
           ...state, 
-          cartProdcuts: updatedProducts, 
+          cartProducts: updatedProducts, 
           totalPrice: updatedTotalPrice, 
-          totalCounnt: updatedTotalCount 
+          totalCount: updatedTotalCount 
         };
       }),
     
       on(clear, (state) => ({
         ...state,
-        cartProdcuts: [],
+        cartProducts: [],
         totalPrice: 0,
-        totalCounnt: 0
+        totalCount: 0
       }))
 );

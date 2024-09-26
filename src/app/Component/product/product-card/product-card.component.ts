@@ -8,6 +8,8 @@ import { CartProduct } from '../../../Model/class';
 import { CartState } from '../../../states/cart/cart.state';
 import { Store } from '@ngrx/store';
 import { add, updateProductCount } from '../../../states/cart/action/cart.action';
+import { take } from 'rxjs';
+import { selectCartProducts } from '../../../states/cart/selector/cart.selector';
 
 @Component({
   selector: 'app-product-card',
@@ -16,7 +18,7 @@ import { add, updateProductCount } from '../../../states/cart/action/cart.action
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
 })
-export class ProductCardComponent implements OnChanges, DoCheck{
+export class ProductCardComponent implements OnChanges{
   @Input() product: any;
   @Output() cardClick = new EventEmitter<number>();
   count: number = 1;
@@ -24,35 +26,22 @@ export class ProductCardComponent implements OnChanges, DoCheck{
   constructor(private cartService: CartService, private mixpanelService: MixpanelService,  private router: Router, private toastr: ToastrService,
     private renderer: Renderer2, private el: ElementRef, private store: Store<{ cart: CartState }>) {}
   
-  //NgonChanges
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges on product-card');
     // alert("ngOnChanges");
   }
-  //caled for each changes
-  ngDoCheck(): void {
-    this.changeCount++;
-    console.log('Docheck: counter ' + this.changeCount);
-  }
+
   addToCart(event: Event) {   
     event.stopPropagation();
-    this.cartService.addToCart(this.product, this.count);
-    this.count = 1;
-    this.toastr.success('Addtocart Success');
-    // Renderer2 Service
-    const button = this.el.nativeElement.querySelector('button');
-    this.renderer.setStyle(button, 'color', 'red'); 
-    //ngrx
-    let existingProduct = false;
-    this.store.select('cart').subscribe(cartState => {
-      existingProduct = cartState.cartProducts.some(p => p.id === this.product.id);
+    let existingProduct  ;
+   
+    this.store.select('cart').pipe(take(1)).subscribe(cartState => {
+      existingProduct = cartState.cartProducts.find(p => p.id === this.product.id);
+      if(existingProduct)this.count = existingProduct?.count +1;
     });
 
     if (existingProduct) {
-      // Update product count if it already exists
-      this.store.dispatch(updateProductCount({ productId: this.product.id, count: this.count }));
+      this.store.dispatch(updateProductCount({ productId: this.product.id, count: this.count}));
     } else {
-      // Add the product to the cart
       const cartProduct: CartProduct = {
         id: this.product.id,
         brand: this.product.brand,
@@ -60,12 +49,13 @@ export class ProductCardComponent implements OnChanges, DoCheck{
         category: this.product.category,
         stock: this.product.stock,
         count: this.count,
-        price: this.product.price
+        price: this.product.price,
+        images: this.product.images
       };
 
       this.store.dispatch(add({ product: cartProduct }));
     }
-    this.count = 1; // Reset count after adding to cart
+    this.count = 1; 
   }
   onCardClick() {
     this.cardClick.emit(this.product.id);

@@ -6,8 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { CartState } from '../../states/cart/cart.state';
-import { add } from '../../states/cart/action/cart.action';
+import { add, remove, updateProductCount } from '../../states/cart/action/cart.action';
 import { selectCartProducts, selectTotalCount, selectTotalPrice } from '../../states/cart/selector/cart.selector';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -25,7 +26,6 @@ export class AddToCartComponent implements OnInit {
   totalPrice = 0;
 
   constructor(
-    // private cartService: CartService,
     private store: Store<{ cart: CartState }>,
     private router: Router
   ) {}
@@ -34,54 +34,23 @@ export class AddToCartComponent implements OnInit {
     this.loadCartItems();
   }
 
-  addToCart() {
-    // if (this.product) {
-    //   this.cartService.addToCart(this.product, this.quantity);
-    //   this.feedbackMessage = 'Product added to cart!';      
-    //   this.loadCartItems(); 
-    // } else {
-    //   this.feedbackMessage = 'Failed to add product to cart.';
-    // }
-    if (this.product) {
-      const cartProduct: CartProduct = {
-        id: this.product.id,
-        brand: this.product.brand,
-        title: this.product.title,
-        category: this.product.category,
-        stock: this.product.stock,
-        count: this.quantity,
-        price: this.product.price
-      };
-
-      // Dispatch the add action to the store
-      this.store.dispatch(add({ product: cartProduct }));
-      this.feedbackMessage = 'Product added to cart!';
-      this.loadCartItems(); // Update cart items after adding
-    } else {
-      this.feedbackMessage = 'Failed to add product to cart.';
-    }
-  }
   increment(item: any) {
-    debugger;
-    item.count = item.count + 1; 
+    this.store.dispatch(updateProductCount({ productId: item.id, count: item.count + 1}));
+    this.loadCartItems();
   }
 
   decrement(item: any) {
     if (item.count > 1) {
-      item.count -= 1;
+      this.store.dispatch(updateProductCount({ productId: item.id, count: item.count - 1}));
+      this.loadCartItems();
     } else {
       this.removeItem(item); 
     }
  
   }
   removeItem(item: any) {
-    // this.cartService.removeProductFromCart(item);
-    this.loadCartItems(); // Update cart items after removal
-  }
-
-  clearCart() {
-    // this.cartService.clearCart();
-    this.loadCartItems(); // Update cart items after clearing
+    this.store.dispatch(remove({ productId: item.id}));
+    this.loadCartItems(); 
   }
 
   goToCheckout() {
@@ -93,16 +62,9 @@ export class AddToCartComponent implements OnInit {
   }
 
   private loadCartItems() {
-    // this.cartItems = this.cartService.getCartItems();
-    // console.log(this.cartItems); 
-    // this.totalPrice = this.cartService.getTotalPrice();
-    debugger;
-    this.store.select(selectCartProducts).subscribe(items => {
-      debugger;
-      this.carProducts=items;
-    });
-    this.store.select(selectTotalPrice).subscribe(total => {
-      this.totalPrice = total;
-    });
+    this.store.select('cart').pipe(take(1)).subscribe(cartState => {
+      this.carProducts=cartState.cartProducts;
+      this.totalPrice = cartState.totalPrice
+    })
   }
 }

@@ -8,6 +8,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MixpanelService } from '../../Shared/Services/mixpanel.service';
 import { ToastrService } from 'ngx-toastr';
+import { Store } from '@ngrx/store';
+import { CartState } from '../../states/cart/cart.state';
+import { take } from 'rxjs';
+import { selectTotalCount } from '../../states/cart/selector/cart.selector';
 
 @Component({
   selector: 'app-layout',
@@ -23,19 +27,24 @@ export class LayoutComponent implements OnInit{
  constructor(private router: Router,
   private cartService: CartService,
   private mixpanelService: MixpanelService,
-  private toastr: ToastrService
+  private toastr: ToastrService,
+  private store: Store<{ cart: CartState }>,
   ){
+    debugger;
     const loacalUser = localStorage.getItem('loggedUser');
     if(loacalUser != null){
       this.loggedUser =JSON.parse(loacalUser);
     }
-    this.cartItemCount =this.cartService.getTotalCount();
-    this.updateCartItemCount();
+   
  }
   ngOnInit() {
-    this.cartService.cartCount$.subscribe(count => {
-      this.cartItemCount = count;
-    });
+    
+   this.loadCartItems();
+  }
+  private loadCartItems() {
+    this.store.select('cart').subscribe(cartState => {     
+      this.cartItemCount = cartState.totalCount
+    })
   }
  onLogOut(){
   this.mixpanelService.trackEvent('Logout', { eventType: 'logout'});

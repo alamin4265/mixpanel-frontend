@@ -34,6 +34,7 @@ export class SignUpModel {
     category: string;
     price: number;
     stock: number;
+    images?:string;
     count: number;
   }
   export class Product {
