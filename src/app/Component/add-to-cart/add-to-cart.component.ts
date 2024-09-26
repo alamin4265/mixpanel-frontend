@@ -56,7 +56,19 @@ export class AddToCartComponent implements OnInit {
   goBack() {
     this.router.navigate(['/products']);
   }
+  increment(item: any) {
+    debugger;
+    item.count = item.count + 1; 
+  }
 
+  decrement(item: any) {
+    if (item.count > 1) {
+      item.count -= 1;
+    } else {
+      this.removeItem(item); 
+    }
+ 
+  }
   private loadCartItems() {
     this.cartItems = this.cartService.getCartItems();
     console.log(this.cartItems); 
