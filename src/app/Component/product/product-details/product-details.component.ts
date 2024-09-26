@@ -1,6 +1,6 @@
 import { CommonModule, JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AfterContentChecked, AfterContentInit, Component, OnInit } from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MixpanelService } from '../../../Shared/Services/mixpanel.service';
@@ -14,8 +14,10 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
-export class ProductDetailsComponent implements OnInit, AfterContentInit,AfterContentChecked{
+export class ProductDetailsComponent implements OnInit, AfterViewInit, AfterContentInit{
   prod: any;
+  @ViewChild('categoryElement') categoryElement!: ElementRef;
+
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -36,11 +38,26 @@ export class ProductDetailsComponent implements OnInit, AfterContentInit,AfterCo
   }
   //initialize
   ngAfterContentInit(): void {
-    console.log("ngAfterContentInit on product-details");
+    // alert("ngAfterContentInit"); 
+    // console.log("ngAfterContentInit on product-details");
   }
-  //checked or changed
-  ngAfterContentChecked(): void {
-    console.log("ngAfterContentChecked on product-details");
+
+  ngAfterViewInit(): void { 
+    alert("ngAfterViewInit"); 
+    console.log('ngAfterViewInit: View has been initialized'); 
+    // this.prod.category="Watch"
+    this.updateCategory('Watch');
+    
+  }
+  
+  ngAfterViewChecked(): void {
+    // alert("ngAfterViewChecked");
+    console.log('Checked for view changes')  
+  }
+  
+  updateCategory(newCategory: string): void {
+    this.prod.category = newCategory;
+    this.categoryElement.nativeElement.innerText = `Category: ${this.prod.category}`;
   }
 
   addToCart(product: any){    

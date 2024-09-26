@@ -1,6 +1,6 @@
 import { CommonModule, JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { afterNextRender, afterRender, AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, viewChild, ViewChildren } from '@angular/core';
+import { AfterContentInit, afterNextRender, afterRender, AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, SimpleChanges, ViewChild, viewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router} from '@angular/router';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
-export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked, OnDestroy{
+export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked,AfterContentInit,AfterViewInit,AfterViewInit,OnDestroy{
   totalProducts: number = 0; 
   pageSize: number = 10;
   pageIndex: number = 0;
@@ -66,6 +66,7 @@ export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked,
     this.pageSize = event.pageSize;
     this.fetchProducts(this.pageIndex, this.pageSize); 
   }
+ 
   createProduct() {
     if (this.productOBJ) {
       let last:any = this.productList[this.productList.length-1];
@@ -125,12 +126,22 @@ export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked,
         });
     }
   }
+  ngAfterContentInit(): void {
+    
+    console.log("ngAfterContentInit");
+  }
+  ngAfterContentChecked(): void {
+    // alert("ngAfterContentChecked");
+    console.log("ngAfterContentChecked");
+  }
   ngAfterViewInit(): void {
+    // alert("ngAfterViewInit");
     console.log('ngAfterViewInit: View has been initialized'); 
     console.log(this.child);
   }
 
   ngAfterViewChecked(): void {
+   
     console.log('Checked for view changes');
     console.log(this.child);
     this.child.logProductDetails();
@@ -139,6 +150,7 @@ export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked,
     });
   }
 
+  
   ngOnDestroy(): void {
     console.log('ProductComponent is being destroyed');
     if (this.productSubscription) {

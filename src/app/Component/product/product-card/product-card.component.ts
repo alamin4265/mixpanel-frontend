@@ -23,7 +23,7 @@ export class ProductCardComponent implements OnChanges, DoCheck{
   //NgonChanges
   ngOnChanges(changes: SimpleChanges): void {
     console.log('ngOnChanges on product-card');
-     console.log(changes);
+    // alert("ngOnChanges");
   }
   //caled for each changes
   ngDoCheck(): void {
