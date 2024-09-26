@@ -19,14 +19,19 @@ export class SignUpModel {
   }
 
   export interface CartItem {
-    // id: number;
+    id: number;
     title: string;
     price: number;
     count: number;
     category?: string; 
     images?: string[]; 
   }
-
+  
+  export interface CartStore {
+    cartCount: number;
+    cartItems: CartItem[];
+  }
+  
   export class Product {
     id: number;
     brand: string;

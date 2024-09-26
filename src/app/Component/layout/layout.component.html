@@ -12,7 +12,7 @@
         <li class="navbar-item ">
           <a class="navbar-link active" routerLink="/products" (click)="viewCart()">
             <i class="fa-solid fa-cart-shopping"></i>
-            <span>{{cartItemCount}}</span>
+            <span>{{cartItemCount$ | async}}</span>
           </a>
       </li>
      
