@@ -6,9 +6,16 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
-import { provideStore } from '@ngrx/store';
+import { ActionReducer, MetaReducer, provideStore } from '@ngrx/store';
 import { cartReducer } from './states/cart/reducer/cart.reducer';
+import { localStorageSync } from 'ngrx-store-localstorage';
 
+export function localStorageSyncReducer(reducer: any) {
+  return localStorageSync({
+    keys: ['cart'],  
+    rehydrate: true, 
+  })(reducer);
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +30,11 @@ export const appConfig: ApplicationConfig = {
         preventDuplicates: true,
         closeButton: true,
         progressBar: true, }),
-    provideStore({cart: cartReducer})
+    provideStore(
+      { cart: cartReducer },
+      {
+        metaReducers: [localStorageSyncReducer],  
+      }
+    )  
 ]
 };

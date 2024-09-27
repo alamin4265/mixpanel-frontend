@@ -2,6 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { CartState } from "../cart.state";
 import { add, clear, remove, updateProductCount } from "../action/cart.action";
 
+
 export const initialState : CartState = {
     cartProducts: [],
     totalCount: 0,
@@ -22,7 +23,6 @@ export const cartReducer  = createReducer(
     on(remove, (state, { productId }) => {
         const removedProduct = state.cartProducts.find(p => p.id === productId);
         if (!removedProduct) return state;
-      debugger;
         const updatedProducts = state.cartProducts.filter(p => p.id !== productId);
         return {
           ...state,
@@ -32,11 +32,9 @@ export const cartReducer  = createReducer(
         };
       }),
     on(updateProductCount, (state, { productId, count }) => {
-        debugger;
         const updatedProducts = state.cartProducts.map(p => 
           p.id === productId ? { ...p, count: count } : p
         );
-        debugger;
         const updatedTotalPrice = updatedProducts.reduce((total, p) => total + p.price * p.count, 0);
         const updatedTotalCount = updatedProducts.reduce((count, p) => count + p.count, 0);
         

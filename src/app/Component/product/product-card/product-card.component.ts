@@ -56,6 +56,7 @@ export class ProductCardComponent implements OnChanges{
       this.store.dispatch(add({ product: cartProduct }));
     }
     this.count = 1; 
+    this.toastr.success("Successfully Added to Cart");
   }
   onCardClick() {
     this.cardClick.emit(this.product.id);

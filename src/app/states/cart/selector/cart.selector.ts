@@ -1,6 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { CartState } from "../cart.state";
-import { CartProduct } from "../../../Model/class";
 
 export const selectCartState = createFeatureSelector<CartState>('cart'); //entire state from storage
 
@@ -20,8 +19,3 @@ export const selectTotalPrice = createSelector(
     (state: CartState)=> state.totalPrice
 );
 
-// export const selectCartProductsById = createSelector(
-//     selectCartProducts,
-//     (products: CartProduct[], props: {productId: number})=>
-//         products.find(product => product.id === props.productId)
-// );

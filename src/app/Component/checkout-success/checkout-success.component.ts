@@ -5,6 +5,9 @@ import { CartService } from '../../Services/cart.service';
 import { Router } from '@angular/router';
 import { CartItem } from '../../Model/class';
 import { ToastrService } from 'ngx-toastr';
+import { CartState } from '../../states/cart/cart.state';
+import { Store } from '@ngrx/store';
+import { clear } from '../../states/cart/action/cart.action';
 @Component({
   selector: 'app-checkout-success',
   standalone: true,
@@ -19,11 +22,7 @@ export class CheckoutSuccessComponent {
   paymentSuccess = false; 
 
 
-  constructor(private cartService: CartService, private router: Router, private toastr: ToastrService) {
-    this.cartItems = this.cartService.getCartItems();
-    this.totalPrice = this.cartService.getTotalPrice();
-    this.count = this.cartService.getTotalCount();
-  }
+  constructor( private store: Store<{ cart: CartState }>, private router: Router, private toastr: ToastrService) {}
 
   processPayment(form: NgForm) {
     if (form.valid) {
@@ -38,7 +37,7 @@ export class CheckoutSuccessComponent {
     }
   }
   Purchase(){
-    this.cartService.clearCart();
+    this.store.dispatch(clear());
     this.paymentSuccess = true;
     this.router.navigate(['/products']);
   }
