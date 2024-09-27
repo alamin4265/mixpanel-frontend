@@ -12,3 +12,8 @@ export const selectProductError = createSelector(
     productStore,
     (state: ProductState) => state.error
 );
+
+export const selectTotalProduct = createSelector(
+    productStore,
+    (state: ProductState) => state.totalItems
+);

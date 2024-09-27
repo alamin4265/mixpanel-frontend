@@ -4,10 +4,12 @@ import { createReducer, on } from "@ngrx/store";
 
 export interface ProductState {
     products: Product[],
+    totalItems: number,
     error: string | null
 }
 export const initialState: ProductState = {
     products: [],
+    totalItems: 0,
     error: ''
 };
 
@@ -16,11 +18,12 @@ export const productReducer = createReducer(
     on(loadProduct, (state) => {
         return state;
     }),
-    on(loadProductSuccess, (state, { products }) => {
+    on(loadProductSuccess, (state, { products, totalItems }) => {
         return {
             ...state,
             products,
-            error:null
+            totalItems,
+            error: null
         };
     }),
     on(loadProductFailure, (state, { errorMessage }) => {

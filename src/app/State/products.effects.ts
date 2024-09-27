@@ -17,9 +17,9 @@ export class ProductsEffects {
             () =>
                 this.actions$.pipe(
                     ofType(loadProduct),
-                    exhaustMap(() => this.productService.getProducts(5, 5)
+                    exhaustMap(({ pageSize, pageIndex }) => this.productService.getProducts(pageIndex-1, pageSize)
                         .pipe(
-                            map((response: any) => loadProductSuccess({ products: response.products })),
+                            map((response: any) => loadProductSuccess({ products: response.products, totalItems: response.total })),
                             catchError((error: { message: string }) => of(loadProductFailure({ errorMessage: "Fail to load products" })))
                         )
                     )

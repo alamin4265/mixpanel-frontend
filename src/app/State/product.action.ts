@@ -12,12 +12,13 @@ export const removeFromCart = createAction(
 );
 
 export const loadProduct = createAction(
-    '[Products Page] Load Products'
+    '[Products Page] Load Products',
+    props<{ pageSize: number, pageIndex: number }>()
 );
 
 export const loadProductSuccess = createAction(
     '[Products API] Products Loaded Success',
-    props<{ products: Product[] }>()
+    props<{ products: Product[], totalItems: 0 }>()
 );
 
 export const loadProductFailure = createAction(

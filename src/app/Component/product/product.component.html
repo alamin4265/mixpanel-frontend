@@ -12,7 +12,7 @@
       <app-product-card *ngFor="let item of loadProducts$ | async" [product]="item" (cardClick)="viewProductDetails($event)"></app-product-card>
     </div>
 
-    <mat-paginator *ngIf="!loading" [length]="totalProducts"
+    <mat-paginator *ngIf="!loading" [length]="totalProducts$|async"
                   [pageSize]="pageSize"
                   [pageSizeOptions]="[5, 10, 25, 100]"
                   (page)="onPageChange($event)">
