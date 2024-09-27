@@ -40,7 +40,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   checkout() { 
-    debugger
     this.cartItems$?.pipe(take(1)).subscribe(cartItems => {
       if (cartItems && cartItems.length > 0) {
         this.mixpanelService.trackEvent('Checkout', { eventType: 'checkout' });

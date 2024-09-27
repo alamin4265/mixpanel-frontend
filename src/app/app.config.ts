@@ -2,7 +2,7 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
@@ -12,6 +12,9 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { BeforeAppInit } from '@ngrx-addons/common';
 import { providePersistStore } from '@ngrx-addons/persist-state';
 import localForage from 'localforage';
+import { provideEffects } from '@ngrx/effects';
+import { ProductsEffects } from './State/products.effects';
+import { productReducer } from './State/product.reducer';
 
 const reducers = {
   cart: cartReducer,
@@ -19,7 +22,7 @@ const reducers = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
@@ -36,6 +39,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideStore(),
     provideState({ name: 'cart', reducer: cartReducer }),
+    provideState({ name: 'product', reducer: productReducer }),
     provideStoreDevtools({
       maxAge: 25
     }),
@@ -49,5 +53,6 @@ export const appConfig: ApplicationConfig = {
       storageKeyPrefix: 'mixpanel-frontend',
       strategy: BeforeAppInit,
     }),
+    provideEffects(ProductsEffects),
   ]
 };

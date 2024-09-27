@@ -33,7 +33,6 @@ export const cartReducer = createReducer(
 
     on(removeFromCart, (state, { cartItem }) => {
         const existingItem = state.cartItems.find(x => x.id === cartItem.id);
-        debugger
         if (!existingItem) {
             return state;
         }

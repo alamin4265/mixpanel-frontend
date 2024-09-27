@@ -7,6 +7,11 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { environment } from '../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectProduct } from '../../State/product.selectors';
+import { Product } from '../../Model/class';
+import { loadProduct } from '../../State/product.action';
 
 @Component({
   selector: 'app-product',
@@ -24,7 +29,12 @@ export class ProductComponent implements OnInit{
   searchQuery: string = ''; 
   apiUrl = environment.baseAPI;
   backProd: any [] =[];
-  constructor(private http : HttpClient, private router: Router, private toastr: ToastrService) { }
+  loadProducts$?:Observable<Product[]>;
+  constructor(private http : HttpClient, private router: Router, private toastr: ToastrService,private store:Store) {
+    
+    this.loadProducts$ = this.store.select(selectProduct);
+    this.loading=false;
+   }
   productOBJ: any ={
     "id":0,
     "brand":"",
@@ -36,10 +46,11 @@ export class ProductComponent implements OnInit{
     "stock": "",
   }
   ngOnInit(): void{ 
-    this.fetchProducts(this.pageIndex, this.pageSize);
+    this.store.dispatch(loadProduct());
+    //this.fetchProducts(this.pageIndex, this.pageSize);
   }
   fetchProducts(pageIndex: number, pageSize: number): void {
-    this.loading = true;
+    this.loading = false;
     const skip = pageIndex * pageSize;
     const apiUrl = `https://dummyjson.com/products?limit=${pageSize}&skip=${skip}&select=brand,title,category,description,price,images,stock`;
     // const api = this.apiUrl+`Product/pagination?limit=${pageSize}&skip=${skip}`;
@@ -49,11 +60,11 @@ export class ProductComponent implements OnInit{
     //   this.totalProducts = response.total; 
     //   this.loading = false;
     // });
-    this.http.get(apiUrl).subscribe((response: any) => {
-      this.productList = response.products;
-      this.totalProducts = response.total; 
-      this.loading = false;
-    });
+    // this.http.get(apiUrl).subscribe((response: any) => {
+    //   this.productList = response.products;
+    //   this.totalProducts = response.total; 
+    //   this.loading = false;
+    // });
   }
   onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
