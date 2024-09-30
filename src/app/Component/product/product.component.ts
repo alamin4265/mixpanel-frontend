@@ -35,7 +35,6 @@ export class ProductComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router, private toastr: ToastrService, private store: Store) {
     this.loadProducts$ = this.store.select(selectProduct);
     this.totalProducts$ = this.store.select(selectTotalProduct);
-    this.loading = false;
   }
 
   productOBJ: any = {
@@ -54,9 +53,13 @@ export class ProductComponent implements OnInit {
   }
 
   fetchProducts(index: number, size: number): void {
-    this.loading = false;
+    
     const pageSize = this.pageSize, pageIndex = this.pageIndex;
     this.store.dispatch(loadProduct({ pageSize, pageIndex }));
+    setTimeout(()=>{
+      this.loading = false;
+    }, 2000);
+    
     // const skip = pageIndex * pageSize;
     // const apiUrl = `https://dummyjson.com/products?limit=${pageSize}&skip=${skip}&select=brand,title,category,description,price,images,stock`;
     // const api = this.apiUrl+`Product/pagination?limit=${pageSize}&skip=${skip}`;

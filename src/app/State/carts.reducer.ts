@@ -4,6 +4,7 @@ import { addToCart, removeFromCart } from "./product.action";
 
 export const initialState: CartStore = {
     cartCount: 0,
+    totalPrice: 0,
     cartItems: []
 };
 
@@ -15,7 +16,6 @@ export const cartReducer = createReducer(
 
         let updatedItems: CartItem[];
         if (existingItem) {
-            //updatedItems=[...state.cartItems];
             updatedItems = state.cartItems.map(item =>
                 item.id === cartItem.id
                     ? { ...item, count: item.count + 1 }
@@ -27,6 +27,7 @@ export const cartReducer = createReducer(
         return {
             ...state,
             cartCount: state.cartCount + 1,
+            totalPrice: state.totalPrice + cartItem.price,
             cartItems: updatedItems
         };
     }),
@@ -38,6 +39,6 @@ export const cartReducer = createReducer(
         }
         const updatedItems: CartItem[] = state.cartItems.filter(x => x.id !== cartItem.id);;
 
-        return { ...state, cartCount: state.cartCount - existingItem.count, cartItems: updatedItems };
+        return { ...state, cartCount: state.cartCount - existingItem.count, cartItems: updatedItems, totalPrice: state.totalPrice - (existingItem.price * existingItem.count) };
     })
 );

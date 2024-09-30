@@ -12,11 +12,11 @@
           </li>
         </ul>
         <div class="total-price">
-          <span class="total-price-label">Total Cont:</span>
+          <span class="total-price-label">Total Count:</span>
           <span class="total-price-value">{{ cartItemCount$ | async }}</span>
           <br>
           <span class="total-price-label">Total Price:</span>
-          <span class="total-price-value">${{ totalPrice }}</span>
+          <span class="total-price-value">${{ cartItemTotalPrice$ | async }}</span>
         </div>
         <button (click)="checkout()" class="btn-checkout">Complete Purchase</button>
       </div>

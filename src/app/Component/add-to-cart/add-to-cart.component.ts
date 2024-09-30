@@ -7,7 +7,7 @@ import { CommonModule, JsonPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { removeFromCart } from '../../State/product.action';
 import { Observable } from 'rxjs';
-import { selectCarts } from '../../State/carts.selectors';
+import { selectCarts, selectCartsTotalPrice } from '../../State/carts.selectors';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -23,6 +23,7 @@ export class AddToCartComponent implements OnInit {
   cartItems: CartItem[] = [];
   cartItems$?:Observable<CartItem[]>;
   totalPrice = 0;
+  cartItemTotalPrice$?: Observable<number>;
 
   constructor(
     private cartService: CartService,
@@ -30,6 +31,7 @@ export class AddToCartComponent implements OnInit {
     private router: Router
   ) {
     this.cartItems$ = this.store.select(selectCarts);
+    this.cartItemTotalPrice$ = this.store.select(selectCartsTotalPrice);
   }
 
   ngOnInit() {

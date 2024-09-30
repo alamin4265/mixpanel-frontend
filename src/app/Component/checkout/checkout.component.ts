@@ -6,31 +6,33 @@ import { CommonModule } from '@angular/common';
 import { CartItem } from '../../Model/class';
 import { MixpanelService } from '../../Shared/Services/mixpanel.service';
 import { Observable, take } from 'rxjs';
-import { selectCartCount, selectCarts } from '../../State/carts.selectors';
+import { selectCartCount, selectCarts, selectCartsTotalPrice } from '../../State/carts.selectors';
 import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent implements OnInit {
   cartItems: CartItem[] = [];
   totalPrice = 0;
-  count : number=0;
-  cartItems$?:Observable<CartItem[]>;
-  cartItemCount$?:Observable<number>;
+  count: number = 0;
+  cartItems$?: Observable<CartItem[]>;
+  cartItemCount$?: Observable<number>;
+  cartItemTotalPrice$?: Observable<number>;
 
   constructor(private cartService: CartService,
     private router: Router,
     private mixpanelService: MixpanelService,
-    private store:Store
-    ) {
-      this.cartItems$ = this.store.select(selectCarts);
-      this.cartItemCount$ = this.store.select(selectCartCount);
-    }
+    private store: Store
+  ) {
+    this.cartItems$ = this.store.select(selectCarts);
+    this.cartItemCount$ = this.store.select(selectCartCount);
+    this.cartItemTotalPrice$ = this.store.select(selectCartsTotalPrice);
+  }
 
   ngOnInit(): void {
     

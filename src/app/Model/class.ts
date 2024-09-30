@@ -29,6 +29,7 @@ export class SignUpModel {
   
   export interface CartStore {
     cartCount: number;
+    totalPrice: number;
     cartItems: CartItem[];
   }
   
