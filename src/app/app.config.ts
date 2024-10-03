@@ -8,14 +8,14 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { ActionReducer, MetaReducer, provideStore } from '@ngrx/store';
 import { cartReducer } from './states/cart/reducer/cart.reducer';
-import { localStorageSync } from 'ngrx-store-localstorage';
+import { BeforeAppInit } from '@ngrx-addons/common';
+import { providePersistStore, localStorageStrategy } from '@ngrx-addons/persist-state';
+import localForage from 'localforage';
 
-export function localStorageSyncReducer(reducer: any) {
-  return localStorageSync({
-    keys: ['cart'],  
-    rehydrate: true, 
-  })(reducer);
-}
+
+const reducers = {
+  cart: cartReducer,
+} as const;
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,11 +30,19 @@ export const appConfig: ApplicationConfig = {
         preventDuplicates: true,
         closeButton: true,
         progressBar: true, }),
-    provideStore(
-      { cart: cartReducer },
-      {
-        metaReducers: [localStorageSyncReducer],  
-      }
-    )  
+    provideStore({ cart: cartReducer }),
+    // provideStoreDevtools({
+    //   maxAge: 25
+    // }),
+    providePersistStore<typeof reducers>({
+      states: [
+        {
+          key: 'cart',
+          storage: localForage
+        },
+      ],
+      storageKeyPrefix: 'mixpanel-frontend',
+      strategy: BeforeAppInit,
+    }),
 ]
 };

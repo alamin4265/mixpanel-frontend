@@ -40,6 +40,9 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, AfterCont
         this.http.get(`https://dummyjson.com/products/${id}`).subscribe((result: any) => {
           this.prod = result;
           this.mixpanelService.trackEvent('ProductDetail', { Category: this.prod.category });
+          // const localUser = localStorage.getItem('samia@gmail.com');
+          
+          this.mixpanelService.eventWithUserInfo('samia@gmail.com');
         });
       }
   }
@@ -50,7 +53,7 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, AfterCont
   }
 
   ngAfterViewInit(): void { 
-    alert("ngAfterViewInit"); 
+    // alert("ngAfterViewInit"); 
     // this.prod.category="Watch"
     // this.updateCategory('Watch');
     

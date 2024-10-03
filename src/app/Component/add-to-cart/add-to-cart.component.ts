@@ -9,6 +9,8 @@ import { CartState } from '../../states/cart/cart.state';
 import { add, remove, updateProductCount } from '../../states/cart/action/cart.action';
 import { selectCartProducts, selectTotalCount, selectTotalPrice } from '../../states/cart/selector/cart.selector';
 import { Subscription, take } from 'rxjs';
+import { MixpanelService } from '../../Shared/Services/mixpanel.service';
+
 
 @Component({
   selector: 'app-add-to-cart',
@@ -25,14 +27,19 @@ export class AddToCartComponent implements OnInit , OnDestroy{
   carProducts: CartProduct[] = [];
   totalPrice = 0;
   productSubscription:  Subscription | undefined; 
+ 
   
   constructor(
     private store: Store<{ cart: CartState }>,
+    private mixpanelService: MixpanelService,
     private router: Router
   ) {}
 
   ngOnInit() {
     this.loadCartItems();
+    this.mixpanelService.trackEvent('Addtocart', { TotalPrice: this.totalPrice });
+          // const localUser = localStorage.getItem('samia@gmail.com'); 
+    this.mixpanelService.eventWithUserInfo('samia@gmail.com');
   }
   
   increment(item: any) {
@@ -67,6 +74,7 @@ export class AddToCartComponent implements OnInit , OnDestroy{
       this.carProducts=cartState.cartProducts;
       this.totalPrice = cartState.totalPrice
     })
+
   }
 
   ngOnDestroy(): void {

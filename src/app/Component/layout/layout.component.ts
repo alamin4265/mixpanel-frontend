@@ -30,7 +30,6 @@ export class LayoutComponent implements OnInit{
   private toastr: ToastrService,
   private store: Store<{ cart: CartState }>,
   ){
-    debugger;
     const loacalUser = localStorage.getItem('loggedUser');
     if(loacalUser != null){
       this.loggedUser =JSON.parse(loacalUser);
