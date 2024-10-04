@@ -6,12 +6,15 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
-import { ActionReducer, MetaReducer, provideStore } from '@ngrx/store';
+import { ActionReducer, MetaReducer, provideState, provideStore } from '@ngrx/store';
 import { cartReducer } from './states/cart/reducer/cart.reducer';
 import { BeforeAppInit } from '@ngrx-addons/common';
 import { providePersistStore, localStorageStrategy } from '@ngrx-addons/persist-state';
 import localForage from 'localforage';
-
+import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { productReducer } from './states/product/reducer/product.reducer';
+import { ProductEffects } from './states/product/effect/product.effect';
 
 const reducers = {
   cart: cartReducer,
@@ -30,10 +33,14 @@ export const appConfig: ApplicationConfig = {
         preventDuplicates: true,
         closeButton: true,
         progressBar: true, }),
-    provideStore({ cart: cartReducer }),
-    // provideStoreDevtools({
-    //   maxAge: 25
-    // }),
+    provideStore(),
+    // provideStore({ cart: cartReducer }),
+    provideState({ name: 'cart', reducer: cartReducer }),
+    provideState({ name: 'product', reducer: productReducer }),
+    // provideState({ name: 'product', reducer: productReducer }),
+    provideStoreDevtools({
+      maxAge: 25
+    }),
     providePersistStore<typeof reducers>({
       states: [
         {
@@ -44,5 +51,6 @@ export const appConfig: ApplicationConfig = {
       storageKeyPrefix: 'mixpanel-frontend',
       strategy: BeforeAppInit,
     }),
+    provideEffects(ProductEffects),
 ]
 };

@@ -49,11 +49,11 @@ export default class LifeCycleComponent implements OnInit,OnChanges,DoCheck, Aft
  //when going 1 page to another ->If need to do something before component destroy.
  //normaly used in API call unsubscribed
   ngOnDestroy(): void {
-    console.log("ngOnDestroy");
+    // console.log("ngOnDestroy");
   }
   //used for reusable component: any component inputs have changed
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("ngOnChanges");
+    // console.log("ngOnChanges");
   }
 
   

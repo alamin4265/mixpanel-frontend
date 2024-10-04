@@ -4,15 +4,17 @@
       <input type="text" [(ngModel)]="searchQuery" placeholder="Search products..." (input)="onSearch()" class="search-box"/>
     </div>
 
-    <div *ngIf="loading" class="loading-indicator">
+    <!-- <div *ngIf="loading" class="loading-indicator">
       <p>Loading products...</p>
+    </div> -->
+
+    <div  class="product-card-container">
+      <!-- <app-product-card #productcard *ngFor="let item of productList" [product]="item" (cardClick)="viewProductDetails($event)"></app-product-card> -->
+
+      <app-product-card  *ngFor="let item of loadProducts$ | async" [product]="item" (cardClick)="viewProductDetails($event)"></app-product-card>
     </div>
 
-    <div *ngIf="!loading" class="product-card-container">
-      <app-product-card #productcard *ngFor="let item of productList" [product]="item" (cardClick)="viewProductDetails($event)"></app-product-card>
-    </div>
-
-    <mat-paginator *ngIf="!loading" [length]="totalProducts"
+    <mat-paginator [length]="totalProducts$|async"
                   [pageSize]="pageSize"
                   [pageSizeOptions]="[5, 10, 25, 100]"
                   (page)="onPageChange($event)">

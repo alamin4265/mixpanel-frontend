@@ -7,7 +7,11 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { environment } from '../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Product } from '../../Model/class';
+import { selectProduct, selectTotalProduct } from '../../states/product/selector/product.selector';
+import { loadProduct } from '../../states/product/action/product.action';
 
 @Component({
   selector: 'app-product',
@@ -28,8 +32,12 @@ export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked,
   productSubscription:  Subscription | undefined; 
   @ViewChildren(ProductCardComponent) productCards!: QueryList<ProductCardComponent>;
   @ViewChild('productcard') child!: ProductCardComponent;
+  loadProducts$?: Observable<Product[]>;
+  totalProducts$: Observable<number>;
   
-  constructor(private http : HttpClient, private router: Router, private toastr: ToastrService) {
+  constructor(private http : HttpClient, private router: Router, private toastr: ToastrService, private store: Store) {
+    this.loadProducts$ = this.store.select(selectProduct);
+    this.totalProducts$ = this.store.select(selectTotalProduct);
    }
   productOBJ: any ={
     "id":0,
@@ -44,10 +52,15 @@ export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked,
   ngOnInit(): void{ 
     this.fetchProducts(this.pageIndex, this.pageSize);
   }
-  fetchProducts(pageIndex: number, pageSize: number): void {
-    this.loading = true;
-    const skip = pageIndex * pageSize;
-    const apiUrl = `https://dummyjson.com/products?limit=${pageSize}&skip=${skip}&select=brand,title,category,description,price,images,stock`;
+  fetchProducts(index: number, size: number): void {
+    // this.loading = true;
+    const pageSize = this.pageSize, pageIndex = this.pageIndex;
+    // const skip = pageIndex * pageSize;
+    this.store.dispatch(loadProduct({pageSize, pageIndex}));
+    setTimeout(()=>{
+      this.loading = false;
+    }, 2000);
+    // const apiUrl = `https://dummyjson.com/products?limit=${pageSize}&skip=${skip}&select=brand,title,category,description,price,images,stock`;
     // const api = this.apiUrl+`Product/pagination?limit=${pageSize}&skip=${skip}`;
     // this.http.get(api).subscribe((response: any) => {
     //   debugger;
@@ -55,11 +68,11 @@ export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked,
     //   this.totalProducts = response.total; 
     //   this.loading = false;
     // });
-   this.productSubscription = this.http.get(apiUrl).subscribe((response: any) => {
-      this.productList = response.products;
-      this.totalProducts = response.total; 
-      this.loading = false;
-    });
+  //  this.productSubscription = this.http.get(apiUrl).subscribe((response: any) => {
+  //     this.productList = response.products;
+  //     this.totalProducts = response.total; 
+  //     this.loading = false;
+  //   });
   }
   onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
@@ -128,34 +141,34 @@ export class ProductComponent implements OnInit, AfterViewInit,AfterViewChecked,
   }
   ngAfterContentInit(): void {
     
-    console.log("ngAfterContentInit");
+    // console.log("ngAfterContentInit");
   }
   ngAfterContentChecked(): void {
     // alert("ngAfterContentChecked");
-    console.log("ngAfterContentChecked");
+    // console.log("ngAfterContentChecked");
   }
   ngAfterViewInit(): void {
     // alert("ngAfterViewInit");
-    console.log('ngAfterViewInit: View has been initialized'); 
-    console.log(this.child);
+    // console.log('ngAfterViewInit: View has been initialized'); 
+    // console.log(this.child);
   }
 
   ngAfterViewChecked(): void {
    
-    console.log('Checked for view changes');
-    console.log(this.child);
-    this.child.logProductDetails();
-    this.productCards.forEach(productCard => {
-      //productCard.logProductDetails(); // Call method from child component
-    });
+    // console.log('Checked for view changes');
+    // console.log(this.child);
+    // this.child.logProductDetails();
+    // this.productCards.forEach(productCard => {
+    //   //productCard.logProductDetails(); // Call method from child component
+    // });
   }
 
   
   ngOnDestroy(): void {
-    console.log('ProductComponent is being destroyed');
-    if (this.productSubscription) {
-      this.productSubscription.unsubscribe();
-    }
+    // console.log('ProductComponent is being destroyed');
+    // if (this.productSubscription) {
+    //   this.productSubscription.unsubscribe();
+    // }
   }
  
 }

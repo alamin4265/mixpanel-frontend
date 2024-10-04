@@ -53,8 +53,8 @@ export default class AddProductComponent {
     const api = this.apiUrl+`Product/1`;
      this.http.get(api).subscribe((response: any) => {
   
-      this.productOBJ.name= response.name;
-      this.prod.name=response.name;
+      this.productOBJ.brand= response.brand;
+      this.prod.brand=response.brand;
     });
   }
   goBack() {
