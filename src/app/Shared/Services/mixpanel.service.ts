@@ -5,6 +5,7 @@ import mixpanel from 'mixpanel-browser';
   providedIn: 'root'
 })
 export class MixpanelService {
+  private readonly ANONYMOUS_ID_KEY = 'anonymousId';
 
   constructor() {
     //daa76dd6afd4babe15f321a4e77a3ded  -me
@@ -16,19 +17,36 @@ export class MixpanelService {
       track_pageview: true,
       persistence: 'localStorage',
     });
+    if (!this.getAnonymousId()) {
+      this.setAnonymousId(this.generateAnonymousId());
+    }
    }
+   
+  private generateAnonymousId(): string {
+    return 'sd_' + Math.random().toString(36).substr(2, 9);
+  }
+  
+  private getAnonymousId(): string | null {
+    return localStorage.getItem(this.ANONYMOUS_ID_KEY);
+  }
 
+  private setAnonymousId(id: string): void {
+    localStorage.setItem(this.ANONYMOUS_ID_KEY, id);
+  }
    // Method to track events
   trackEvent(event: string, properties?: any) {
-   var flag =  mixpanel.track(event, properties);
-   console.log(flag);
+   mixpanel.track(event, properties);
+   
   }
 
   // Method to identify users
   identifyUser(userId: string, name:string) {
     debugger;
-    let newUserId = "user_124";
-    // var aliasUser = mixpanel.alias(userId);
+    const anonymousId = this.getAnonymousId();
+    if (anonymousId) {
+      mixpanel.alias(userId, anonymousId);
+      localStorage.removeItem(this.ANONYMOUS_ID_KEY);
+    }
     var identifyUser = mixpanel.identify(userId);
 
    var  flag = mixpanel.people.set({
@@ -37,12 +55,20 @@ export class MixpanelService {
     }); 
 
   }
+  setIdentity(userId: string, properties: Record<string, any>){
+    const identifyUser = mixpanel.identify(userId);
+    const flag = mixpanel.people.set(properties);
+    // You might want to do something with identifyUser and flag here
+  }
+
   eventWithUserInfo(userId: string){
-      mixpanel.identify(userId);
-      mixpanel.track("price2",{
+    mixpanel.track("addtocart",{
       account_submitted: true,
       is_account_resubmitted: true
-      })   
-      mixpanel.people.set({"price2": true})
+      })
+     mixpanel.identify(userId);   
+   
+      mixpanel.people.set({"addtocart2": false})
+        
   }
 }

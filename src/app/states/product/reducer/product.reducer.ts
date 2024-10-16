@@ -1,18 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
-// import { ProductState } from "../product.state";
 import { loadProduct, loadProductFailure, loadProductSuccess } from "../action/product.action";
 import { Product } from "../../../Model/class";
+import { ProductState } from "../product.state";
 
-// export const initialState: ProductState = {
-//     products: [],
-//     totalItems: 0,
-//     error: ''
-// }
-export interface ProductState {
-    products: Product[],
-    totalItems: number,
-    error: string | null
-}
 export const initialState: ProductState = {
     products: [],
     totalItems: 0,

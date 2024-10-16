@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT, JsonPipe } from '@angular/common';
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router} from '@angular/router';
 import { ProductComponent } from '../product/product.component';
@@ -16,24 +16,36 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './signup-login.component.html',
   styleUrl: './signup-login.component.css'
 })
-export class SignupLoginComponent {
+export class SignupLoginComponent implements OnInit{
 
   isSignDivVisiable: boolean = true;
   signUpobj : SignUpModel = new SignUpModel();
   loginobj : LoginModel = new LoginModel();
+  anonymousId: string = "";
 
   constructor(
     private router: Router,
     private mixpanelService: MixpanelService,
     private toastr: ToastrService
   ){}
+  ngOnInit(): void {
+    this.anonymousId = localStorage.getItem('anonymousId') || this.generateAnonymousId();
+    debugger;
+    if (!localStorage.getItem('anonymousId')) {
+      localStorage.setItem('anonymousId', this.anonymousId);
+    }
+    this.mixpanelService.trackEvent('Page View', { user_id: this.anonymousId });
+  }
+  generateAnonymousId(): string {
+    return 'sd_' + Math.random().toString(36).substr(2, 9);
+  }
   
   showSuccess() {
     this.toastr.success('Registration Success', 'Toastr fun!', {
       positionClass: 'toast-top-center'});
   }
   onRegister(){
-   debugger;
+   
     const localUser = localStorage.getItem('trackpanel18users');
     if(localUser !=null){
       const users = JSON.parse(localUser);
@@ -55,6 +67,12 @@ export class SignupLoginComponent {
        if(isUserPresent != undefined)
        {
         this.mixpanelService.identifyUser(this.signUpobj.email, isUserPresent.name);
+        
+        this.mixpanelService.setIdentity(this.signUpobj.email,
+          {
+            '$name': `${this.signUpobj.name} `,
+            '$email': this.signUpobj.email
+          });
         this.mixpanelService.trackEvent('Login', { email: this.signUpobj.email, eventType: 'Signup' });
         localStorage.setItem('loggedUser', JSON.stringify(isUserPresent));
         this.toastr.success('Registration Success');
